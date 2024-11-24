@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Review{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h1>Review for {{ product.product_name }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="review_text" class="form-label">Write your review</label>
+            <textarea class="form-control" id="review_text" name="review_text" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+    
+    <h3 class="mt-4">Previous Reviews</h3>
+    {% for review in product.reviews.all %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ review.user.username }} ({{ review.sentiment_label }})</h5>
+                <p class="card-text">{{ review.review_text }}</p>
+                <p class="card-text"><small class="text-muted">Posted on {{ review.timestamp }}</small></p>
+            </div>
+        </div>
+    {% empty %}
+        <p>No reviews yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

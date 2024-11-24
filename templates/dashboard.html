@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h1>Welcome to the Dashboard</h1>
+    <p>Hello, {{ user.username }}!</p>
+    <p>This is your dashboard where you can manage your activities.</p>
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card" style="width: 18rem;">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.product_name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.product_name }}</h5>
+                        <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                        <p class="card-text"><small class="text-muted">Category: {{ product.category }}</small></p>
+
+                        <!-- Displaying the average sentiment score -->
+                        <p class="card-text">
+                            <small class="text-muted">Sentiment Score: 
+                                {% if product.avg_sentiment_score > 0 %}
+                                    <span class="text-success">Positive</span>
+                                {% elif product.avg_sentiment_score < 0 %}
+                                    <span class="text-danger">Negative</span>
+                                {% else %}
+                                    <span class="text-muted">Neutral</span>
+                                {% endif %}
+                            </small>
+                        </p>
+
+                        <a href="{% url 'add_review' product.product_id %}" class="btn btn-primary">Add Review</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
